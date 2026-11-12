@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { workspaceApi, WorkspaceRole } from '../services/workspaceApi';
 import type { Workspace, WorkspaceMember } from '../services/workspaceApi';
+import { getApiErrorMessage } from '../utils/apiError';
 
 interface WorkspaceState {
   workspaces: Workspace[];
@@ -15,7 +16,7 @@ interface WorkspaceState {
   updateWorkspace: (workspaceId: string, name: string, description: string) => Promise<void>;
   deleteWorkspace: (workspaceId: string) => Promise<void>;
   fetchMembers: (workspaceId: string) => Promise<void>;
-  addMember: (workspaceId: string, email: string, role?: WorkspaceRole) => Promise<void>;
+  addMember: (workspaceId: string, email: string, password: string, role?: WorkspaceRole) => Promise<{ message: string }>;
   updateMemberRole: (workspaceId: string, memberId: string, role: WorkspaceRole) => Promise<void>;
   removeMember: (workspaceId: string, memberId: string) => Promise<void>;
   setCurrentWorkspace: (workspace: Workspace | null) => void;
@@ -34,8 +35,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set) => ({
     try {
       const response = await workspaceApi.getWorkspaces();
       set({ workspaces: response.workspaces, isLoading: false });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch workspaces';
+    } catch (error: unknown) {
+      const errorMessage = getApiErrorMessage(error, 'Failed to fetch workspaces');
       set({ isLoading: false, error: errorMessage });
       throw error;
     }
@@ -50,8 +51,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set) => ({
         isLoading: false,
       }));
       return response.workspace;
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to create workspace';
+    } catch (error: unknown) {
+      const errorMessage = getApiErrorMessage(error, 'Failed to create workspace');
       set({ isLoading: false, error: errorMessage });
       throw error;
     }
@@ -62,8 +63,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set) => ({
     try {
       const response = await workspaceApi.getWorkspace(workspaceId);
       set({ currentWorkspace: response.workspace, isLoading: false });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch workspace';
+    } catch (error: unknown) {
+      const errorMessage = getApiErrorMessage(error, 'Failed to fetch workspace');
       set({ isLoading: false, error: errorMessage });
       throw error;
     }
@@ -80,8 +81,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set) => ({
         currentWorkspace: state.currentWorkspace?.id === workspaceId ? response.workspace : state.currentWorkspace,
         isLoading: false,
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to update workspace';
+    } catch (error: unknown) {
+      const errorMessage = getApiErrorMessage(error, 'Failed to update workspace');
       set({ isLoading: false, error: errorMessage });
       throw error;
     }
@@ -96,8 +97,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set) => ({
         currentWorkspace: state.currentWorkspace?.id === workspaceId ? null : state.currentWorkspace,
         isLoading: false,
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to delete workspace';
+    } catch (error: unknown) {
+      const errorMessage = getApiErrorMessage(error, 'Failed to delete workspace');
       set({ isLoading: false, error: errorMessage });
       throw error;
     }
@@ -108,23 +109,24 @@ export const useWorkspaceStore = create<WorkspaceState>((set) => ({
     try {
       const response = await workspaceApi.getWorkspaceMembers(workspaceId);
       set({ members: response.members, isLoading: false });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch members';
+    } catch (error: unknown) {
+      const errorMessage = getApiErrorMessage(error, 'Failed to fetch members');
       set({ isLoading: false, error: errorMessage });
       throw error;
     }
   },
 
-  addMember: async (workspaceId: string, email: string, role?: WorkspaceRole) => {
+  addMember: async (workspaceId: string, email: string, password: string, role?: WorkspaceRole) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await workspaceApi.addMember(workspaceId, { email, role });
+      const response = await workspaceApi.addMember(workspaceId, { email, password, role });
       set((state) => ({
         members: [...state.members, response.member],
         isLoading: false,
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to add member';
+      return { message: response.message };
+    } catch (error: unknown) {
+      const errorMessage = getApiErrorMessage(error, 'Failed to add member');
       set({ isLoading: false, error: errorMessage });
       throw error;
     }
@@ -140,8 +142,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set) => ({
         ),
         isLoading: false,
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to update member role';
+    } catch (error: unknown) {
+      const errorMessage = getApiErrorMessage(error, 'Failed to update member role');
       set({ isLoading: false, error: errorMessage });
       throw error;
     }
@@ -155,8 +157,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set) => ({
         members: state.members.filter((m) => m.id !== memberId),
         isLoading: false,
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to remove member';
+    } catch (error: unknown) {
+      const errorMessage = getApiErrorMessage(error, 'Failed to remove member');
       set({ isLoading: false, error: errorMessage });
       throw error;
     }

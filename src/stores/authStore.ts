@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { authApi } from '../services/authApi';
 import type { User, LoginCredentials, RegisterCredentials } from '../services/authApi';
+import { getApiErrorMessage } from '../utils/apiError';
 
 interface AuthState {
   user: User | null;
@@ -15,6 +16,7 @@ interface AuthState {
   register: (credentials: RegisterCredentials) => Promise<void>;
   logout: () => void;
   clearError: () => void;
+  updateUser: (user: User) => void;
   initializeAuth: () => void;
 }
 
@@ -43,8 +45,8 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null,
           });
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || 'Login failed';
+        } catch (error: unknown) {
+          const errorMessage = getApiErrorMessage(error, 'Login failed');
           set({
             isLoading: false,
             error: errorMessage,
@@ -68,8 +70,8 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null,
           });
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || 'Registration failed';
+        } catch (error: unknown) {
+          const errorMessage = getApiErrorMessage(error, 'Registration failed');
           set({
             isLoading: false,
             error: errorMessage,
@@ -93,6 +95,8 @@ export const useAuthStore = create<AuthState>()(
       clearError: () => {
         set({ error: null });
       },
+
+      updateUser: (user) => set({ user }),
 
       initializeAuth: () => {
         const accessToken = localStorage.getItem('accessToken');

@@ -1,8 +1,137 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary-purple: #6D28D9;
+  --color-hover-purple: #5B21B6;
+  --color-deep-indigo: #1E1B4B;
+  --color-soft-lavender: #F5F3FF;
+  --color-text-main: #0F172A;
+  --color-text-muted: #64748B;
+  --color-dark-bg: #0B0B14;
+  --color-dark-surface: #151522;
+  --color-lavender-accent: #C4B5FD;
+}
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #F5F3FF;
+  color: #0F172A;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html.dark body {
+  background-color: #0B0B14;
+  color: #F5F3FF;
+}
+
+/* Cinematic Keyframe Animations */
+@keyframes orbDrift1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.08);
+  }
+}
+
+@keyframes orbDrift2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-35px, 35px) scale(0.94);
+  }
+}
+
+@keyframes orbDrift3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, 25px) scale(1.05);
+  }
+}
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes itemFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtlePulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.15);
+  }
+}
+
+.animate-orb-drift-1 {
+  animation: orbDrift1 22s ease-in-out infinite;
+}
+
+.animate-orb-drift-2 {
+  animation: orbDrift2 26s ease-in-out infinite;
+}
+
+.animate-orb-drift-3 {
+  animation: orbDrift3 28s ease-in-out infinite;
+}
+
+.animate-card-entrance {
+  animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-stagger-1 {
+  animation: itemFadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.animate-stagger-2 {
+  animation: itemFadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.14s both;
+}
+
+.animate-stagger-3 {
+  animation: itemFadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+}
+
+.animate-particle-pulse {
+  animation: subtlePulse 4.5s ease-in-out infinite;
+}
+
+/* Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .animate-orb-drift-1,
+  .animate-orb-drift-2,
+  .animate-orb-drift-3,
+  .animate-card-entrance,
+  .animate-stagger-1,
+  .animate-stagger-2,
+  .animate-stagger-3,
+  .animate-particle-pulse {
+    animation: none !important;
+    transform: none !important;
+    transition-duration: 0.01ms !important;
+  }
 }

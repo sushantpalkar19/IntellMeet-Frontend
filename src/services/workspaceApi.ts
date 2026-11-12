@@ -42,6 +42,7 @@ export interface UpdateWorkspaceInput {
 
 export interface AddMemberInput {
   email: string;
+  password: string;
   role?: WorkspaceRole;
 }
 

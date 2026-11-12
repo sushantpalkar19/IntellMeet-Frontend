@@ -10,6 +10,7 @@ export interface User {
   avatar: string | null;
   createdAt: string;
   updatedAt?: string;
+  mustChangePassword?: boolean;
 }
 
 export interface AuthResponse {
