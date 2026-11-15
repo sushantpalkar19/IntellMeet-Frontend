@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Meeting, CreateMeetingInput, MeetingStatus } from '../../types/meeting';
 import { meetingApi } from '../../services/meetingApi';
+import { schedulingApi } from '../../services/schedulingApi';
 import MeetingCard from './MeetingCard';
 import NewMeetingModal from './NewMeetingModal';
 import JoinMeetingModal from './JoinMeetingModal';
@@ -86,6 +87,26 @@ export default function MeetingList({
   const handleJoinClick = (meeting: Meeting) => {
     if (meeting.status === 'ended' || meeting.status === 'cancelled') return;
     navigate(`/meeting/${meeting.id}`);
+  };
+
+  const handleEditMeeting = (meeting: Meeting) => {
+    navigate(`/calendar?workspaceId=${encodeURIComponent(workspaceId)}&meeting=${encodeURIComponent(meeting.id)}`);
+  };
+
+  const handleCancelMeeting = async (meeting: Meeting) => {
+    if (!window.confirm(`Are you sure you want to cancel "${meeting.title}"? Invited participants will be notified.`)) {
+      return;
+    }
+    try {
+      await schedulingApi.cancel(meeting.id);
+      setMeetings((prev) =>
+        prev.map((m) => (m.id === meeting.id ? { ...m, status: 'cancelled' } : m))
+      );
+      setFeedbackMessage(`Meeting "${meeting.title}" has been cancelled.`);
+      setTimeout(() => setFeedbackMessage(null), 5000);
+    } catch {
+      setError('Unable to cancel meeting. Please try again.');
+    }
   };
 
   const confirmEndMeeting = async () => {
@@ -294,7 +315,18 @@ export default function MeetingList({
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredMeetings.map((meeting) => (
-              <MeetingCard key={meeting.id} meeting={meeting} onJoin={handleJoinClick} onEndMeeting={(item) => { setEndMeetingError(null); setMeetingToEnd(item); }} currentUserId={currentUser?.id} />
+              <MeetingCard
+                key={meeting.id}
+                meeting={meeting}
+                onJoin={handleJoinClick}
+                onEndMeeting={(item) => {
+                  setEndMeetingError(null);
+                  setMeetingToEnd(item);
+                }}
+                onEditMeeting={handleEditMeeting}
+                onCancelMeeting={(item) => void handleCancelMeeting(item)}
+                currentUserId={currentUser?.id}
+              />
             ))}
           </div>
         )}

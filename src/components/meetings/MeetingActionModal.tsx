@@ -10,7 +10,8 @@ interface MeetingActionModalProps {
 export default function MeetingActionModal({ meeting, isOpen, onClose }: MeetingActionModalProps) {
   if (!isOpen || !meeting) return null;
 
-  const formatDateTime = (dateStr: string) => {
+  const formatDateTime = (dateStr?: string) => {
+    if (!dateStr) return 'Not scheduled';
     try {
       return new Intl.DateTimeFormat('en-US', {
         dateStyle: 'full',
@@ -21,29 +22,33 @@ export default function MeetingActionModal({ meeting, isOpen, onClose }: Meeting
     }
   };
 
+  const hostName = meeting.createdByUser
+    ? `${meeting.createdByUser.firstName} ${meeting.createdByUser.lastName}`
+    : 'Workspace Host';
+
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn"
       role="dialog"
       aria-modal="true"
       aria-labelledby="meeting-action-title"
     >
-      <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 text-left relative transform transition-all">
+      <div className="bg-[#171525] text-white rounded-2xl shadow-2xl border border-purple-900/40 max-w-lg w-full p-6 sm:p-7 text-left relative transform transition-all animate-card-entrance">
         {/* Header */}
-        <div className="flex justify-between items-start pb-4 border-b border-gray-100">
+        <div className="flex justify-between items-start pb-4 border-b border-purple-900/30">
           <div>
-            <div className="flex items-center space-x-2 mb-1.5">
+            <div className="flex items-center space-x-2 mb-2">
               <MeetingStatusBadge status={meeting.status} />
-              <span className="text-xs text-gray-500 font-mono">ID: {meeting.id}</span>
+              <span className="text-xs text-slate-400 font-mono">ID: {meeting.id}</span>
             </div>
-            <h2 id="meeting-action-title" className="text-xl font-bold text-gray-900">
+            <h2 id="meeting-action-title" className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               {meeting.title}
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 focus:outline-none p-1 rounded-md"
+            className="text-slate-400 hover:text-white hover:bg-white/10 focus:outline-none p-1.5 rounded-xl transition-colors duration-150"
             aria-label="Close modal"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -53,45 +58,32 @@ export default function MeetingActionModal({ meeting, isOpen, onClose }: Meeting
         </div>
 
         {/* Meeting Information */}
-        <div className="py-4 space-y-3">
+        <div className="py-4 space-y-3.5">
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</p>
-            <p className="text-sm text-gray-700 mt-1">{meeting.description || 'No description provided.'}</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Description</p>
+            <p className="text-sm text-slate-200 mt-1 leading-relaxed">{meeting.description || 'No description provided.'}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 pt-2">
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Scheduled For</p>
-              <p className="text-xs text-gray-800 mt-1 font-medium">{formatDateTime(meeting.scheduledAt || meeting.createdAt)}</p>
+          <div className="grid grid-cols-2 gap-4 pt-1">
+            <div className="p-3 bg-[#12111E] rounded-xl border border-slate-800">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Scheduled Time</p>
+              <p className="text-xs text-slate-200 mt-1 font-medium">{formatDateTime(meeting.scheduledAt || meeting.startedAt)}</p>
             </div>
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Organizer</p>
-              <p className="text-xs text-gray-800 mt-1 font-medium">
-                {meeting.createdByUser ? `${meeting.createdByUser.firstName} ${meeting.createdByUser.lastName}` : 'Team Lead'}
+            <div className="p-3 bg-[#12111E] rounded-xl border border-slate-800">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Host</p>
+              <p className="text-xs text-slate-200 mt-1 font-medium">
+                {hostName}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Informational Banner */}
-        <div className="p-3.5 bg-blue-50 border border-blue-200 rounded-lg flex items-start space-x-3 mb-5">
-          <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>
-            <h4 className="text-xs font-semibold text-blue-900">Phase 6 - Step 1 UI Scope</h4>
-            <p className="text-xs text-blue-700 mt-0.5 leading-relaxed">
-              Real-time video/audio calling, WebRTC peer connection, and Socket.IO signaling are not yet connected in the backend. These will be enabled in subsequent steps when backend meeting routes are deployed.
-            </p>
-          </div>
-        </div>
-
-        {/* Modal Footer */}
-        <div className="flex justify-end space-x-3">
+        {/* Footer Actions */}
+        <div className="pt-4 border-t border-purple-900/30 flex justify-end space-x-3">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+            className="px-4 py-2 border border-slate-700/80 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 focus:outline-none transition-colors"
           >
             Close
           </button>
@@ -100,4 +92,3 @@ export default function MeetingActionModal({ meeting, isOpen, onClose }: Meeting
     </div>
   );
 }
-

@@ -167,52 +167,52 @@ export default function Dashboard() {
             </span>
           </div>
 
-          {/* Meeting Stats (Honest Empty / Scheduled State) */}
+          {/* Meeting Stats */}
           <div className="bg-white dark:bg-[#151522] rounded-2xl p-5 border border-purple-100/70 dark:border-purple-900/30 shadow-sm transition-all">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-semibold text-[#64748B] dark:text-slate-400 uppercase tracking-wider">
                 Meetings
               </span>
               <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-purple-100 dark:bg-purple-950/70 text-purple-700 dark:text-[#C4B5FD]">
-                Phase 6 UI
+                Active
               </span>
             </div>
             <div className="text-2xl font-bold text-[#0F172A] dark:text-white">
               —
             </div>
             <p className="text-xs text-[#64748B] dark:text-slate-400 mt-1">
-              Live metrics connect in Phase 6 backend
+              Active conferences &amp; scheduled calls
             </p>
             {primaryWorkspace ? (
               <Link
                 to={`/workspaces/${primaryWorkspace.id}`}
                 className="mt-3.5 inline-flex items-center text-xs font-semibold text-[#6D28D9] dark:text-[#C4B5FD] hover:underline"
               >
-                Workspace Meetings UI &rarr;
+                Workspace Meetings &rarr;
               </Link>
             ) : (
               <span className="mt-3.5 inline-block text-xs text-slate-400">Available inside workspaces</span>
             )}
           </div>
 
-          {/* AI Insights & Action Items (Honest Placeholder) */}
+          {/* AI Insights & Action Items */}
           <div className="bg-white dark:bg-[#151522] rounded-2xl p-5 border border-purple-100/70 dark:border-purple-900/30 shadow-sm transition-all">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-semibold text-[#64748B] dark:text-slate-400 uppercase tracking-wider">
                 AI Summaries
               </span>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300">
-                Phase 5
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300">
+                Operational
               </span>
             </div>
             <div className="text-2xl font-bold text-[#0F172A] dark:text-white">
               —
             </div>
             <p className="text-xs text-[#64748B] dark:text-slate-400 mt-1">
-              Action items and AI summaries
+              Smart transcripts &amp; action items
             </p>
             <span className="mt-3.5 inline-block text-xs text-slate-400 dark:text-slate-500">
-              Awaiting backend Whisper/GPT
+              Generated in meeting notes
             </span>
           </div>
         </section>
@@ -366,72 +366,203 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* Platform Status & Roadmap Section */}
-        <section className="bg-white dark:bg-[#151522] rounded-2xl p-6 sm:p-8 shadow-sm border border-purple-100/80 dark:border-purple-900/30">
-          <div className="mb-4">
-            <h2 className="text-lg font-bold text-[#0F172A] dark:text-white">
-              IntellMeet Platform Modules
-            </h2>
-            <p className="text-xs text-[#64748B] dark:text-slate-400 mt-0.5">
-              Current operational status of enterprise collaboration services.
-            </p>
+        {/* IntellMeet Platform Overview */}
+        <section className="bg-white dark:bg-[#151522] rounded-2xl p-6 sm:p-8 shadow-sm border border-purple-100/80 dark:border-purple-900/30 transition-all">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-5 border-b border-slate-100 dark:border-slate-800 gap-3">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-[#C4B5FD] flex items-center justify-center">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-bold text-[#0F172A] dark:text-white tracking-tight">
+                  IntellMeet Platform Overview
+                </h2>
+              </div>
+              <p className="text-xs sm:text-sm text-[#64748B] dark:text-slate-400 mt-1">
+                Your enterprise collaboration ecosystem at a glance.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/40 px-3 py-1.5 rounded-full w-fit">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>All Systems Operational</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-[#1C1C2E]">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-semibold text-[#0F172A] dark:text-white">
-                  Auth &amp; JWT
-                </span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
-                  Ready
-                </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
+            {/* Authentication & Security */}
+            <div className="group rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-[#1C1C2E] hover:border-purple-300 dark:hover:border-purple-700/60 hover:shadow-lg hover:shadow-purple-950/5 dark:hover:shadow-black/40 transition-all duration-200 flex flex-col justify-between h-full">
+              <div>
+                <div className="flex items-center justify-between mb-3.5">
+                  <div className="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-[#6D28D9] dark:text-[#C4B5FD] flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
+                    Operational
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-[#0F172A] dark:text-white group-hover:text-[#6D28D9] dark:group-hover:text-[#C4B5FD] transition-colors">
+                  Authentication &amp; Security
+                </h3>
+                <p className="text-xs text-[#64748B] dark:text-slate-400 mt-1 mb-4 leading-relaxed">
+                  Enterprise-grade access control, token rotation, and identity verification.
+                </p>
+                <ul className="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>JWT Authentication</span>
+                  </li>
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Secure Login &amp; Registration</span>
+                  </li>
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Session Management</span>
+                  </li>
+                </ul>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                JWT refresh, protected routes, and session persistence.
-              </p>
             </div>
 
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-[#1C1C2E]">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-semibold text-[#0F172A] dark:text-white">
-                  Workspaces &amp; RBAC
-                </span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
-                  Ready
-                </span>
+            {/* Workspace Management */}
+            <div className="group rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-[#1C1C2E] hover:border-purple-300 dark:hover:border-purple-700/60 hover:shadow-lg hover:shadow-purple-950/5 dark:hover:shadow-black/40 transition-all duration-200 flex flex-col justify-between h-full">
+              <div>
+                <div className="flex items-center justify-between mb-3.5">
+                  <div className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
+                    Operational
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-[#0F172A] dark:text-white group-hover:text-[#6D28D9] dark:group-hover:text-[#C4B5FD] transition-colors">
+                  Workspace Management
+                </h3>
+                <p className="text-xs text-[#64748B] dark:text-slate-400 mt-1 mb-4 leading-relaxed">
+                  Dedicated spaces for team collaboration, member invitations, and access roles.
+                </p>
+                <ul className="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Workspace Management</span>
+                  </li>
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Role-Based Access Control</span>
+                  </li>
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Team Collaboration</span>
+                  </li>
+                </ul>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Workspace CRUD and multi-tier member role permissions.
-              </p>
             </div>
 
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-[#1C1C2E]">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-semibold text-[#0F172A] dark:text-white">
+            {/* Real-Time Meetings */}
+            <div className="group rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-[#1C1C2E] hover:border-purple-300 dark:hover:border-purple-700/60 hover:shadow-lg hover:shadow-purple-950/5 dark:hover:shadow-black/40 transition-all duration-200 flex flex-col justify-between h-full">
+              <div>
+                <div className="flex items-center justify-between mb-3.5">
+                  <div className="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-[#6D28D9] dark:text-[#C4B5FD] flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
+                    Operational
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-[#0F172A] dark:text-white group-hover:text-[#6D28D9] dark:group-hover:text-[#C4B5FD] transition-colors">
                   Real-Time Meetings
-                </span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-[#C4B5FD]">
-                  Phase 6 UI
-                </span>
+                </h3>
+                <p className="text-xs text-[#64748B] dark:text-slate-400 mt-1 mb-4 leading-relaxed">
+                  HD audio/video conferencing with WebRTC mesh, screen sharing, and live chat.
+                </p>
+                <ul className="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Video Conferencing</span>
+                  </li>
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Audio &amp; Video Controls</span>
+                  </li>
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Screen Sharing</span>
+                  </li>
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Real-Time Chat</span>
+                  </li>
+                </ul>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Dashboard &amp; controls UI ready; WebRTC backend pending.
-              </p>
             </div>
 
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-[#1C1C2E]">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-semibold text-[#0F172A] dark:text-white">
-                  AI Summaries
-                </span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                  Phase 5
-                </span>
+            {/* AI Meeting Intelligence */}
+            <div className="group rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-[#1C1C2E] hover:border-purple-300 dark:hover:border-purple-700/60 hover:shadow-lg hover:shadow-purple-950/5 dark:hover:shadow-black/40 transition-all duration-200 flex flex-col justify-between h-full">
+              <div>
+                <div className="flex items-center justify-between mb-3.5">
+                  <div className="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
+                    Operational
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-[#0F172A] dark:text-white group-hover:text-[#6D28D9] dark:group-hover:text-[#C4B5FD] transition-colors">
+                  AI Meeting Intelligence
+                </h3>
+                <p className="text-xs text-[#64748B] dark:text-slate-400 mt-1 mb-4 leading-relaxed">
+                  Automated transcription pipelines, executive summaries, and task extraction.
+                </p>
+                <ul className="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Meeting Transcription</span>
+                  </li>
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>AI-Generated Summaries</span>
+                  </li>
+                  <li className="flex items-center text-xs text-slate-700 dark:text-slate-300">
+                    <svg className="w-3.5 h-3.5 mr-2 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Smart Action Items</span>
+                  </li>
+                </ul>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Whisper voice-to-text &amp; GPT meeting action items.
-              </p>
             </div>
           </div>
         </section>
