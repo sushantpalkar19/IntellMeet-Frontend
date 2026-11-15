@@ -20,7 +20,7 @@ export default function DashboardMeetingModal({
 
   const handleSelectWorkspace = (workspaceId: string) => {
     onClose();
-    navigate(`/workspaces/${workspaceId}`);
+    navigate(actionType === 'schedule' ? `/calendar?workspaceId=${encodeURIComponent(workspaceId)}&create=1` : `/workspaces/${workspaceId}`);
   };
 
   return (

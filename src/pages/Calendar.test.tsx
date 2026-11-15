@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import Calendar from './Calendar';
@@ -41,5 +41,28 @@ describe('Calendar page', () => {
     render(<MemoryRouter><Calendar /></MemoryRouter>);
     expect(await screen.findByText('Calendar events could not be loaded.')).toBeInTheDocument();
     await waitFor(() => expect(schedulingApi.upcoming).toHaveBeenCalled());
+  });
+
+  it('submits the selected workspace and schedule fields, then confirms success', async () => {
+    vi.mocked(schedulingApi.schedule).mockResolvedValue({ meeting } as never);
+    render(<MemoryRouter><Calendar /></MemoryRouter>);
+    fireEvent.click(await screen.findByRole('button', { name: 'Schedule meeting' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Schedule a meeting' });
+    fireEvent.change(within(dialog).getByLabelText(/Workspace/), { target: { value: workspace.id } });
+    fireEvent.change(within(dialog).getByPlaceholderText('e.g., Weekly Sprint Planning'), { target: { value: 'Planning session' } });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Schedule Meeting' }));
+    await waitFor(() => expect(schedulingApi.schedule).toHaveBeenCalledWith(expect.objectContaining({ workspaceId: workspace.id, title: 'Planning session', localStart: expect.any(String), localEnd: expect.any(String), timeZone: expect.any(String) })));
+    expect(await screen.findByRole('status')).toHaveTextContent('Meeting scheduled.');
+  });
+
+  it('shows the validation message returned by the scheduling API', async () => {
+    vi.mocked(schedulingApi.schedule).mockRejectedValueOnce({ response: { data: { message: 'Meeting start must be in the future.' } } });
+    render(<MemoryRouter><Calendar /></MemoryRouter>);
+    fireEvent.click(await screen.findByRole('button', { name: 'Schedule meeting' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Schedule a meeting' });
+    fireEvent.change(within(dialog).getByLabelText(/Workspace/), { target: { value: workspace.id } });
+    fireEvent.change(within(dialog).getByPlaceholderText('e.g., Weekly Sprint Planning'), { target: { value: 'Planning session' } });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Schedule Meeting' }));
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent('Meeting start must be in the future.');
   });
 });
