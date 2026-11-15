@@ -5,11 +5,27 @@ import { useWorkspaceStore } from '../stores/workspaceStore';
 import { WorkspaceRole } from '../services/workspaceApi';
 import DashboardNavbar from '../components/layout/DashboardNavbar';
 import DashboardMeetingModal from '../components/dashboard/DashboardMeetingModal';
+import { analyticsApi, type DashboardStats } from '../services/analyticsApi';
 
 export default function Dashboard() {
   const { user } = useAuthStore();
   const { workspaces, isLoading, error, fetchWorkspaces } = useWorkspaceStore();
   const navigate = useNavigate();
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [statsError, setStatsError] = useState('');
+  const fetchStats = useMemo(() => async () => {
+    try { setStats(await analyticsApi.getDashboardStats()); setStatsError(''); }
+    catch { setStatsError('Could not load dashboard counts.'); }
+  }, []);
+
+  useEffect(() => {
+    void fetchStats();
+    const refresh = () => { void fetchStats(); };
+    const timer = window.setInterval(refresh, 30_000);
+    window.addEventListener('focus', refresh);
+    window.addEventListener('intellmeet:data-updated', refresh);
+    return () => { window.clearInterval(timer); window.removeEventListener('focus', refresh); window.removeEventListener('intellmeet:data-updated', refresh); };
+  }, [fetchStats]);
 
   const [meetingModal, setMeetingModal] = useState<{
     isOpen: boolean;
@@ -178,7 +194,7 @@ export default function Dashboard() {
               </span>
             </div>
             <div className="text-2xl font-bold text-[#0F172A] dark:text-white">
-              —
+              {stats ? stats.meetings.active : statsError ? <button type="button" role="alert" onClick={() => void fetchStats()} className="text-xs text-red-600 dark:text-red-300">Counts unavailable · Retry</button> : <span role="status" aria-label="Loading meetings" className="inline-block w-8 h-6 bg-slate-100 dark:bg-slate-800 animate-pulse rounded" />}
             </div>
             <p className="text-xs text-[#64748B] dark:text-slate-400 mt-1">
               Active conferences &amp; scheduled calls
@@ -206,7 +222,7 @@ export default function Dashboard() {
               </span>
             </div>
             <div className="text-2xl font-bold text-[#0F172A] dark:text-white">
-              —
+              {stats ? stats.aiSummaries : statsError ? <button type="button" role="alert" onClick={() => void fetchStats()} className="text-xs text-red-600 dark:text-red-300">Counts unavailable · Retry</button> : <span role="status" aria-label="Loading AI summaries" className="inline-block w-8 h-6 bg-slate-100 dark:bg-slate-800 animate-pulse rounded" />}
             </div>
             <p className="text-xs text-[#64748B] dark:text-slate-400 mt-1">
               Smart transcripts &amp; action items

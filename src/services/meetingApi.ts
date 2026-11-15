@@ -1,6 +1,8 @@
 import api from './authApi';
 import type { Meeting, CreateMeetingInput, MessagesResponse } from '../types/meeting';
 
+function notifyDashboardDataUpdated() { if (typeof window !== 'undefined') window.dispatchEvent(new Event('intellmeet:data-updated')); }
+
 export interface MeetingListResponse {
   meetings: Meeting[];
 }
@@ -39,7 +41,7 @@ export const meetingApi = {
   getRecordingPlaybackTicket: async (recordingId: string) => (await api.post(`/v1/recordings/${recordingId}/playback-ticket`)).data as { expiresAt: string; streamUrl: string; downloadUrl: string },
   deleteRecording: async (recordingId: string) => api.delete(`/v1/recordings/${recordingId}`),
   getMeetingSummary: async (meetingId: string) => (await api.get(`/v1/meetings/${meetingId}/summary`)).data as { summary: MeetingSummary | null },
-  generateMeetingSummary: async (meetingId: string, regenerate = false) => (await api.post(`/v1/meetings/${meetingId}/summary/${regenerate ? 'regenerate' : 'generate'}`)).data as { summary: MeetingSummary },
+  generateMeetingSummary: async (meetingId: string, regenerate = false) => { const result = (await api.post(`/v1/meetings/${meetingId}/summary/${regenerate ? 'regenerate' : 'generate'}`)).data as { summary: MeetingSummary }; notifyDashboardDataUpdated(); return result; },
   getMeetingActionItems: async (meetingId: string) => (await api.get(`/v1/meetings/${meetingId}/action-items`)).data as { actionItems: MeetingActionItem[] },
   updateMeetingActionItem: async (meetingId: string, actionItemId: string, input: { assigneeId?: string | null; dueDate?: string | null }) => (await api.patch(`/v1/meetings/${meetingId}/action-items/${actionItemId}`, input)).data as { actionItem: MeetingActionItem },
   updateMeetingActionItemStatus: async (meetingId: string, actionItemId: string, status: MeetingActionItem['status']) => (await api.patch(`/v1/meetings/${meetingId}/action-items/${actionItemId}/status`, { status })).data as { actionItem: MeetingActionItem },
@@ -81,6 +83,7 @@ export const meetingApi = {
 
   createMeeting: async (input: CreateMeetingInput): Promise<MeetingResponse> => {
     const response = await api.post<MeetingResponse>('/v1/meetings', input);
+    notifyDashboardDataUpdated();
     return response.data;
   },
 
@@ -99,11 +102,13 @@ export const meetingApi = {
 
   joinMeeting: async (meetingId: string): Promise<JoinMeetingResponse> => {
     const response = await api.post<JoinMeetingResponse>(`/v1/meetings/${meetingId}/join`);
+    notifyDashboardDataUpdated();
     return response.data;
   },
 
   endMeeting: async (meetingId: string): Promise<EndMeetingResponse> => {
     const response = await api.post<EndMeetingResponse>(`/v1/meetings/${meetingId}/end`);
+    notifyDashboardDataUpdated();
     return response.data;
   },
 

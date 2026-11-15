@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import DashboardNavbar from '../components/layout/DashboardNavbar';
 import { useWorkspaceStore } from '../stores/workspaceStore';
-import { analyticsApi } from '../services/analyticsApi';
+import { analyticsApi, defaultAnalyticsFilters } from '../services/analyticsApi';
 import type { AiAnalytics, AnalyticsFilters, MeetingAnalytics, OverviewAnalytics, TaskAnalytics, WorkspaceAnalytics } from '../services/analyticsApi';
 
-function dateOffset(days: number) { const date = new Date(); date.setDate(date.getDate() - days); return date.toISOString().slice(0, 10); }
 function durationLabel(ms: number | null) { if (ms === null) return 'N/A'; const minutes = Math.round(ms / 60000); if (minutes < 60) return `${minutes} min`; return `${Math.floor(minutes / 60)}h ${minutes % 60}m`; }
 function formatPeriod(value: string) { if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return new Date(`${value}T12:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); return value; }
 
@@ -26,7 +25,7 @@ function Kpi({ label, value, hint }: { label: string; value: string | number; hi
 type Data = { overview: OverviewAnalytics; meetings: MeetingAnalytics; tasks: TaskAnalytics; ai: AiAnalytics; workspaces: WorkspaceAnalytics };
 export default function Analytics() {
   const { workspaces, fetchWorkspaces } = useWorkspaceStore();
-  const [filters, setFilters] = useState<AnalyticsFilters>({ from: dateOffset(29), to: new Date().toISOString().slice(0, 10), groupBy: 'day' });
+  const [filters, setFilters] = useState<AnalyticsFilters>(defaultAnalyticsFilters);
   const [data, setData] = useState<Data | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

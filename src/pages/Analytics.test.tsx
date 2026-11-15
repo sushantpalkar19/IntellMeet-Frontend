@@ -6,7 +6,7 @@ const { analytics, fetchWorkspaces, pdfSave } = vi.hoisted(() => ({
   analytics: { getOverview: vi.fn(), getMeetings: vi.fn(), getTasks: vi.fn(), getAi: vi.fn(), getWorkspaces: vi.fn() },
   pdfSave: vi.fn(),
 }));
-vi.mock('../services/analyticsApi', () => ({ analyticsApi: analytics }));
+vi.mock('../services/analyticsApi', () => ({ analyticsApi: analytics, defaultAnalyticsFilters: () => ({ from: '2026-10-01', to: '2026-10-30', groupBy: 'day' }) }));
 vi.mock('../stores/workspaceStore', () => ({ useWorkspaceStore: () => ({ workspaces: [{ id: 'w-1', name: 'Design Team' }], fetchWorkspaces }) }));
 vi.mock('../components/layout/DashboardNavbar', () => ({ default: () => <nav>Navigation</nav> }));
 vi.mock('jspdf', () => ({ default: class { setFontSize = vi.fn(); text = vi.fn(); addPage = vi.fn(); save = pdfSave; } }));

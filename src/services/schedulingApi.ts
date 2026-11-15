@@ -1,18 +1,20 @@
 import api from './authApi';
 import type { Meeting, MeetingStatus } from '../types/meeting';
 
+function notifyDashboardDataUpdated() { if (typeof window !== 'undefined') window.dispatchEvent(new Event('intellmeet:data-updated')); }
+
 export interface ScheduledMeeting extends Meeting { endsAt?: string; timeZone: string; meetingType: 'team' | 'one_on_one' | 'other'; agenda: string; reminderMinutes: number[] }
 export interface MeetingInvitee { id: string; userId: string; firstName: string; lastName: string; email: string; status: 'invited' | 'accepted' | 'declined' }
 export interface CalendarNotification { id: string; type: string; title: string; message: string; meetingId: string; createdAt: string; readAt?: string }
 export interface ScheduleInput { workspaceId: string; title: string; description: string; localStart: string; localEnd: string; timeZone: string; meetingType: ScheduledMeeting['meetingType']; agenda: string; inviteeIds: string[]; reminderMinutes: number[] }
 
 export const schedulingApi = {
-  schedule: async (input: ScheduleInput) => (await api.post('/v1/meetings/scheduled', input)).data as { meeting: ScheduledMeeting },
+  schedule: async (input: ScheduleInput) => { const result = (await api.post('/v1/meetings/scheduled', input)).data as { meeting: ScheduledMeeting }; notifyDashboardDataUpdated(); return result; },
   calendar: async (range: { from: string; to: string; workspaceId?: string; status?: MeetingStatus }) => (await api.get('/v1/meetings/calendar', { params: range })).data as { meetings: ScheduledMeeting[] },
   upcoming: async () => (await api.get('/v1/meetings/upcoming')).data as { meetings: ScheduledMeeting[] },
   details: async (meetingId: string) => (await api.get(`/v1/meetings/${meetingId}/schedule-details`)).data as { meeting: ScheduledMeeting; invitees: MeetingInvitee[] },
-  update: async (meetingId: string, input: Partial<ScheduleInput>) => (await api.put(`/v1/meetings/${meetingId}/schedule`, input)).data as { meeting: ScheduledMeeting },
-  cancel: async (meetingId: string) => (await api.post(`/v1/meetings/${meetingId}/cancel`)).data as { meeting: ScheduledMeeting },
+  update: async (meetingId: string, input: Partial<ScheduleInput>) => { const result = (await api.put(`/v1/meetings/${meetingId}/schedule`, input)).data as { meeting: ScheduledMeeting }; notifyDashboardDataUpdated(); return result; },
+  cancel: async (meetingId: string) => { const result = (await api.post(`/v1/meetings/${meetingId}/cancel`)).data as { meeting: ScheduledMeeting }; notifyDashboardDataUpdated(); return result; },
   addInvitees: async (meetingId: string, inviteeIds: string[]) => (await api.post(`/v1/meetings/${meetingId}/invitees`, { inviteeIds })).data as { invitees: MeetingInvitee[] },
   removeInvitee: async (meetingId: string, userId: string) => api.delete(`/v1/meetings/${meetingId}/invitees/${userId}`),
   notifications: async (page = 1) => (await api.get('/v1/notifications', { params: { page, limit: 30 } })).data as { notifications: CalendarNotification[]; unread: number },
